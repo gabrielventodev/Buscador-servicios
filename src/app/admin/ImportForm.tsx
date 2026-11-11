@@ -14,7 +14,7 @@ export function ImportForm({ trades }: { trades: string[] }) {
       <p className="muted">
         La primera fila tiene que tener los títulos. Reconoce columnas como <strong>Nombre</strong>, <strong>Oficio</strong> (o
         Rubro), <strong>Celular</strong> (o Teléfono, WhatsApp) y <strong>Notas</strong>. Hasta {LIMIT} filas por archivo.
-        Los números ya cargados se saltean.
+        Los números ya cargados se saltean. También acepta las exportaciones de Google Maps (columnas title, category, phone).
       </p>
       <form action={action} className="stack">
         <div className="grid">
@@ -24,7 +24,7 @@ export function ImportForm({ trades }: { trades: string[] }) {
           </div>
           <div>
             <label htmlFor="defaultTrade">Oficio para todo el archivo</label>
-            <input id="defaultTrade" name="defaultTrade" list="trades-import" placeholder="Solo si no hay columna Oficio" />
+            <input id="defaultTrade" name="defaultTrade" list="trades-import" placeholder="Opcional: reemplaza la columna Oficio" />
             <datalist id="trades-import">
               {trades.map((t) => <option key={t} value={t} />)}
             </datalist>
