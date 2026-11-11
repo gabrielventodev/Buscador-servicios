@@ -23,10 +23,12 @@ export interface ParsedImport {
 }
 
 const ALIASES = {
-  name: ["nombre", "negocio", "nombre del negocio", "razon social", "contacto", "prestador", "empresa"],
-  trade: ["oficio", "rubro", "categoria", "servicio", "especialidad", "profesion"],
-  phone: ["celular", "telefono", "whatsapp", "tel", "movil", "numero", "cel", "telefono celular"],
-  notes: ["notas", "nota", "observaciones", "comentarios", "direccion", "barrio", "zona"],
+  // Incluye los títulos en inglés de las exportaciones de herramientas de mapas
+  // (title, category, phone, address).
+  name: ["nombre", "negocio", "nombre del negocio", "razon social", "contacto", "prestador", "empresa", "title", "name", "business name"],
+  trade: ["oficio", "rubro", "categoria", "servicio", "especialidad", "profesion", "category", "categories"],
+  phone: ["celular", "telefono", "whatsapp", "tel", "movil", "numero", "cel", "telefono celular", "phone", "phone number", "mobile"],
+  notes: ["notas", "nota", "observaciones", "comentarios", "direccion", "barrio", "zona", "address", "notes"],
 } as const;
 type Field = keyof typeof ALIASES;
 

@@ -21,8 +21,20 @@ export function normalizeArPhone(input: string, defaultAreaCode: string): string
   if (d.startsWith("15") && d.length === localLength + 2) d = area + d.slice(2);
   else if (d.length === localLength) d = area + d;
 
-  // "3489 15 123456": código de área + 15 + número.
-  if (d.length === 12 && d.startsWith(area + "15")) d = area + d.slice(area.length + 2);
+  // Código de área + 15 + número, con cualquier código de área:
+  // "3489 15 123456", "011 15 2430 9410", "221 15 123 4567".
+  if (d.length === 12) {
+    if (d.startsWith(area + "15")) d = area + d.slice(area.length + 2);
+    else if (d.startsWith("1115")) d = "11" + d.slice(4);
+    else {
+      for (const len of [3, 4]) {
+        if (d.slice(len, len + 2) === "15") {
+          d = d.slice(0, len) + d.slice(len + 2);
+          break;
+        }
+      }
+    }
+  }
 
   if (d.length !== 10) return null;
   return "549" + d;

@@ -12,6 +12,14 @@ describe("mapRows", () => {
     expect(r.records).toEqual([{ row: 2, name: "Juan", trade: "Plomero", phone: "3489 15 123456", notes: "Centro" }]);
   });
 
+  it("reconoce títulos en inglés de exportaciones de mapas", () => {
+    const r = mapRows([
+      ["input_id", "link", "title", "category", "address", "phone", "place_id"],
+      ["x", "https://maps", "Taller Gino", "Taller mecánico", "Gavazzi 241", "03489 34-7929", "ChIJ"],
+    ]);
+    expect(r.records).toEqual([{ row: 2, name: "Taller Gino", trade: "Taller mecánico", phone: "03489 34-7929", notes: "Gavazzi 241" }]);
+  });
+
   it("encuentra el encabezado aunque no esté en la primera fila", () => {
     const r = mapRows([["Listado de prestadores"], [], ["Nombre", "Oficio", "WhatsApp"], ["Ana", "Gasista", "123456"]]);
     expect(r.records).toHaveLength(1);
