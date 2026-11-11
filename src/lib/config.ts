@@ -6,7 +6,11 @@ function num(name: string, fallback: number): number {
 
 // En Vercel, si no se define BASE_URL, se usa el dominio del despliegue.
 function resolveBaseUrl(): string {
-  const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
+  // En una vista previa, el enlace tiene que apuntar a esa misma vista previa.
+  const vercelHost =
+    process.env.VERCEL_ENV === "production"
+      ? (process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL)
+      : process.env.VERCEL_URL;
   const url = process.env.BASE_URL ?? (vercelHost ? `https://${vercelHost}` : "http://localhost:3000");
   return url.replace(/\/$/, "");
 }
