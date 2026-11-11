@@ -194,3 +194,23 @@ export async function metrics() {
   const [byTrade, byVariant] = await Promise.all([metricsBy("trade"), metricsBy("variant")]);
   return { byTrade, byVariant };
 }
+
+export interface ImportSummary {
+  added: number;
+  duplicates: { row: number; name: string; status: Status }[];
+  invalid: { row: number; reason: string }[];
+}
+
+/** Carga en lote. Reutiliza addProspect: mismas reglas de teléfono y duplicados. */
+export async function importProspects(
+  records: { row: number; name: string; trade: string; phone: string; notes: string }[],
+): Promise<ImportSummary> {
+  const summary: ImportSummary = { added: 0, duplicates: [], invalid: [] };
+  for (const r of records) {
+    const res = await addProspect({ name: r.name, trade: r.trade, phone: r.phone, notes: r.notes, source: "manual" });
+    if (res.ok) summary.added++;
+    else if (res.error === "duplicado") summary.duplicates.push({ row: r.row, name: res.existing.name, status: res.existing.status });
+    else summary.invalid.push({ row: r.row, reason: res.error === "telefono_invalido" ? `teléfono no válido (${r.phone})` : "datos incompletos" });
+  }
+  return summary;
+}

@@ -5,6 +5,7 @@ App para que vecinos de Campana (Buenos Aires) pidan presupuestos a prestadores 
 Esta primera versión cubre el **reclutamiento de prestadores**:
 
 - **Panel `/admin`** (con usuario y contraseña): arma la tanda diaria (20 por defecto). En cada fila hay un botón que abre WhatsApp con el mensaje de invitación listo, y el envío lo confirmás vos en WhatsApp.
+- **Importar desde Excel** (.xlsx o .csv): reconoce columnas como Nombre, Oficio/Rubro, Celular/Teléfono/WhatsApp y Notas. Saltea los números ya cargados y lista las filas con error.
 - **Enlace de invitación `/p/<código>`**: el prestador elige "Me sumo" o "No me interesa".
 - **Registro con aviso de privacidad** (Ley 25.326) y consentimiento guardado.
 - **Seguimiento automático** del estado de cada prestador: Pendiente → Enviado → Interesado → Registrado, o Baja.

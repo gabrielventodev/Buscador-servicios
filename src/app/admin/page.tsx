@@ -11,6 +11,7 @@ import {
 } from "@/lib/prospects";
 import { REASON_LABEL, STATUSES, STATUS_LABEL, type Status } from "@/lib/status";
 import { addProspectAction, optOutAction } from "./actions";
+import { ImportForm } from "./ImportForm";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Panel · Buscador de servicios" };
@@ -199,6 +200,9 @@ export default async function Admin({
         </div>
         <div><button className="btn primary" type="submit">Agregar a la lista</button></div>
       </form>
+
+      <h2>Importar desde Excel</h2>
+      <ImportForm trades={TRADES} />
 
       <h2>Resultados por oficio</h2>
       <div className="card"><MetricsTable rows={stats.byTrade} label="Oficio" /></div>
