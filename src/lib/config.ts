@@ -4,8 +4,15 @@ function num(name: string, fallback: number): number {
   return Number.isFinite(value) && value > 0 ? value : fallback;
 }
 
+// En Vercel, si no se define BASE_URL, se usa el dominio del despliegue.
+function resolveBaseUrl(): string {
+  const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
+  const url = process.env.BASE_URL ?? (vercelHost ? `https://${vercelHost}` : "http://localhost:3000");
+  return url.replace(/\/$/, "");
+}
+
 export const config = {
-  baseUrl: (process.env.BASE_URL ?? "http://localhost:3000").replace(/\/$/, ""),
+  baseUrl: resolveBaseUrl(),
   dailyBatchSize: num("DAILY_BATCH_SIZE", 20),
   noResponseDays: num("NO_RESPONSE_DAYS", 7),
   defaultAreaCode: process.env.DEFAULT_AREA_CODE ?? "3489",
