@@ -37,6 +37,15 @@ npm run dev
 
 Panel: http://localhost:3000/admin
 
+## Publicar para probar (Vercel + Neon, gratis)
+
+1. En [vercel.com/new](https://vercel.com/new), importar este repositorio.
+2. En el proyecto, ir a **Storage → Create Database → Neon (Postgres)** y conectarla. Eso carga `DATABASE_URL` sola.
+3. En **Settings → Environment Variables**, agregar `ADMIN_USER` y `ADMIN_PASSWORD`.
+4. Redesplegar. El build aplica el esquema de la base, y cada PR tiene su propio enlace de vista previa.
+
+`BASE_URL` es opcional en Vercel; si no está, se usa el dominio del despliegue.
+
 ## Comandos
 
 - `npm test`: tests unitarios (normalización de teléfonos, mensajes, estados)
