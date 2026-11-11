@@ -1,0 +1,64 @@
+:root {
+  --bg: #f7f7f5;
+  --card: #ffffff;
+  --text: #1c1c1a;
+  --muted: #6b6b66;
+  --line: #e2e2dc;
+  --accent: #1f7a4d;
+  --accent-text: #ffffff;
+  --danger: #a33a2a;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161615;
+    --card: #1f1f1d;
+    --text: #ececea;
+    --muted: #a3a39d;
+    --line: #34342f;
+    --accent: #3fae78;
+    --accent-text: #0d1a13;
+    --danger: #e0806f;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+main { max-width: 1040px; margin: 0 auto; padding: 24px 16px 64px; }
+main.narrow { max-width: 560px; }
+h1 { font-size: 1.6rem; margin: 0 0 8px; }
+h2 { font-size: 1.2rem; margin: 32px 0 12px; }
+p { margin: 0 0 12px; }
+a { color: var(--accent); }
+.muted { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+.stack > * + * { margin-top: 12px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btn {
+  display: inline-block; border: 1px solid var(--line); background: var(--card); color: var(--text);
+  border-radius: 8px; padding: 8px 14px; font: inherit; cursor: pointer; text-decoration: none;
+}
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); font-weight: 600; }
+.btn.danger { color: var(--danger); }
+.btn.small { padding: 4px 10px; font-size: 0.875rem; }
+.btn.big { padding: 12px 20px; font-size: 1.05rem; width: 100%; text-align: center; }
+label { display: block; font-weight: 600; margin-bottom: 4px; }
+input, select, textarea {
+  width: 100%; font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--card); color: var(--text);
+}
+input[type="checkbox"] { width: auto; margin-right: 8px; }
+.grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.925rem; }
+th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; white-space: nowrap; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.tag { display: inline-block; font-size: 0.8rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); }
+.notice { border-left: 4px solid var(--accent); padding: 8px 12px; background: var(--card); margin-bottom: 16px; }
+.notice.error { border-left-color: var(--danger); }
+.filters a { margin-right: 12px; }
+form.inline { display: inline; }
