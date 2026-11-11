@@ -8,6 +8,7 @@ export interface ImportRecord {
   trade: string;
   phone: string;
   notes: string;
+  placeId?: string;
 }
 
 export interface ImportRowError {
@@ -29,6 +30,7 @@ const ALIASES = {
   trade: ["oficio", "rubro", "categoria", "servicio", "especialidad", "profesion", "category", "categories"],
   phone: ["celular", "telefono", "whatsapp", "tel", "movil", "numero", "cel", "telefono celular", "phone", "phone number", "mobile"],
   notes: ["notas", "nota", "observaciones", "comentarios", "direccion", "barrio", "zona", "address", "notes"],
+  placeId: ["place id"],
 } as const;
 type Field = keyof typeof ALIASES;
 
@@ -57,7 +59,8 @@ function matchField(header: string): Field | null {
 /**
  * Convierte filas crudas en prestadores. La fila de encabezados es la primera
  * (dentro de las 10 primeras) que tenga una columna de teléfono reconocible.
- * Si no hay columna de oficio, se usa `defaultTrade`.
+ * Si se indica `defaultTrade`, reemplaza la columna de oficio (útil cuando la
+ * columna trae categorías de Google como "Taller de reparación de automóviles").
  */
 export function mapRows(rows: string[][], defaultTrade = ""): ParsedImport {
   const headerIndex = rows.slice(0, 10).findIndex((r) => r.some((c) => matchField(c) === "phone"));
@@ -90,11 +93,14 @@ export function mapRows(rows: string[][], defaultTrade = ""): ParsedImport {
     const row = i + 1;
     const name = get(r, "name");
     const phone = get(r, "phone");
-    const trade = get(r, "trade") || defaultTrade.trim();
+    const trade = defaultTrade.trim() || get(r, "trade");
     if (!name) errors.push({ row, reason: "falta el nombre" });
     else if (!phone) errors.push({ row, reason: "falta el teléfono" });
     else if (!trade) errors.push({ row, reason: "falta el oficio" });
-    else records.push({ row, name, trade, phone, notes: get(r, "notes") });
+    else {
+      const placeId = get(r, "placeId");
+      records.push({ row, name, trade, phone, notes: get(r, "notes"), ...(placeId ? { placeId } : {}) });
+    }
   }
   return { records, errors, missingColumns: [], truncated };
 }

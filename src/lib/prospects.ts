@@ -43,7 +43,8 @@ export async function addProspect(input: {
   name: string;
   trade: string;
   phone: string;
-  source?: "manual" | "referido";
+  source?: "manual" | "referido" | "places";
+  placeId?: string;
   notes?: string;
 }): Promise<AddResult> {
   const name = input.name.trim();
@@ -58,9 +59,9 @@ export async function addProspect(input: {
 
   const [{ n }] = await sql<{ n: number }[]>`SELECT count(*)::int AS n FROM prospects`;
   const [prospect] = await sql<Prospect[]>`
-    INSERT INTO prospects (code, name, trade, phone, source, variant, notes)
+    INSERT INTO prospects (code, name, trade, phone, source, place_id, variant, notes)
     VALUES (${generateCode()}, ${name}, ${trade}, ${phone}, ${input.source ?? "manual"},
-            ${pickVariant(n)}, ${input.notes?.trim() || null})
+            ${input.placeId ?? null}, ${pickVariant(n)}, ${input.notes?.trim() || null})
     ON CONFLICT (phone) DO NOTHING
     RETURNING *`;
   if (!prospect) {
@@ -203,11 +204,19 @@ export interface ImportSummary {
 
 /** Carga en lote. Reutiliza addProspect: mismas reglas de teléfono y duplicados. */
 export async function importProspects(
-  records: { row: number; name: string; trade: string; phone: string; notes: string }[],
+  records: { row: number; name: string; trade: string; phone: string; notes: string; placeId?: string }[],
 ): Promise<ImportSummary> {
   const summary: ImportSummary = { added: 0, duplicates: [], invalid: [] };
   for (const r of records) {
-    const res = await addProspect({ name: r.name, trade: r.trade, phone: r.phone, notes: r.notes, source: "manual" });
+    // Con place_id, el origen queda registrado como Google Maps.
+    const res = await addProspect({
+      name: r.name,
+      trade: r.trade,
+      phone: r.phone,
+      notes: r.notes,
+      source: r.placeId ? "places" : "manual",
+      placeId: r.placeId,
+    });
     if (res.ok) summary.added++;
     else if (res.error === "duplicado") summary.duplicates.push({ row: r.row, name: res.existing.name, status: res.existing.status });
     else summary.invalid.push({ row: r.row, reason: res.error === "telefono_invalido" ? `teléfono no válido (${r.phone})` : "datos incompletos" });
